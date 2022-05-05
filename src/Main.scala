@@ -342,6 +342,9 @@ class Main extends Application {
     x.setTranslateZ(x.getTranslateZ * fact)
   }
 
+  def aloteste(): Unit ={
+    println("OI")
+  }
 
   override def init(): Unit = {
     println("init")
