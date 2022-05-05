@@ -14,7 +14,8 @@ import scala.collection.mutable.ListBuffer
 
 class Main extends Application {
 
-  val file = "C:\\Users\\My PC\\Desktop\\Grupo30_RuiCavaco_MiguelReis_InesComba\\conf3D.txt"
+  //val file = "C:\\Users\\My PC\\Desktop\\Grupo30_RuiCavaco_MiguelReis_InesComba\\conf3D.txt"
+  val file = "/Users/miguelreis/Desktop/Universidade/2ºsemestre-2ºano/PPM/Projeto/Base_Project2Share/conf3D.txt"
   val octIns = ObjectLoader()
   var list3D = List[Shape3D]()
   val boxList = ListBuffer[Box]()
