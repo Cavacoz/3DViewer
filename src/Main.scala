@@ -126,7 +126,7 @@ class Main extends Application {
     stage.show
 
     //Criação da OcTree
-    val oct2:Octree[Placement] = octreeDevelope2(wiredBox, list3D.head.asInstanceOf[Node], 8.0, worldRoot)
+    val oct2:Octree[Placement] = octreeDevelope(wiredBox, list3D.head.asInstanceOf[Node], 8.0, worldRoot)
 
     //Mouse left click interaction
     scene.setOnMouseClicked(event => {
@@ -142,117 +142,76 @@ class Main extends Application {
   }
 
   //Tarefa 2
-  //Testar GITHUB
-  def octreeDevelope2(PreBox:Box, cilindro:Node, OctreeDimensions:Double, root:Group): Octree[Placement] = {
+  def octreeDevelope(PreBox:Box, cilindro:Node, OctreeDimensions:Double, root:Group): Octree[Placement] = {
 
     val tamanho: Int = PreBox.getWidth.toInt / 2
     val origemx: Int = PreBox.getTranslateX.toInt
     val origemy: Int = PreBox.getTranslateY.toInt
     val origemz: Int = PreBox.getTranslateZ.toInt
 
-    val Box1 = new Box(tamanho, tamanho, tamanho)
-    Box1.setTranslateX(origemx - tamanho / 2)
-    Box1.setTranslateY(origemy - tamanho / 2)
-    Box1.setTranslateZ(tamanho / 2)
-    Box1.setMaterial(redMaterial)
-    Box1.setDrawMode(DrawMode.LINE)
+    val Box1 = createBox(tamanho, origemx - tamanho / 2, origemy - tamanho / 2, tamanho / 2)
 
-    val Box2 = new Box(tamanho, tamanho, tamanho)
-    Box2.setTranslateX(origemx - tamanho / 2 + tamanho)
-    Box2.setTranslateY(origemy - tamanho / 2 + tamanho)
-    Box2.setTranslateZ(origemz - tamanho / 2)
-    Box2.setMaterial(redMaterial)
-    Box2.setDrawMode(DrawMode.LINE)
+    val Box2 = createBox(tamanho, origemx - tamanho / 2 + tamanho, origemy - tamanho / 2 + tamanho, origemz - tamanho / 2)
 
-    val Box3 = new Box(tamanho, tamanho, tamanho)
-    Box3.setTranslateX(origemx - tamanho / 2 + tamanho)
-    Box3.setTranslateY(origemy - tamanho / 2)
-    Box3.setTranslateZ(origemz - tamanho / 2)
-    Box3.setMaterial(redMaterial)
-    Box3.setDrawMode(DrawMode.LINE)
+    val Box3 = createBox(tamanho, origemx - tamanho / 2 + tamanho, origemy - tamanho / 2, origemz - tamanho / 2)
 
-    val Box4 = new Box(tamanho, tamanho, tamanho)
-    Box4.setTranslateX(origemx - tamanho / 2)
-    Box4.setTranslateY(origemy - tamanho / 2 + tamanho)
-    Box4.setTranslateZ(origemz - tamanho / 2)
-    Box4.setMaterial(redMaterial)
-    Box4.setDrawMode(DrawMode.LINE)
+    val Box4 = createBox(tamanho, origemx - tamanho / 2, origemy - tamanho / 2 + tamanho, origemz - tamanho / 2)
 
-    val Box5 = new Box(tamanho, tamanho, tamanho)
-    Box5.setTranslateX(origemx - tamanho / 2)
-    Box5.setTranslateY(origemy - tamanho / 2)
-    Box5.setTranslateZ(origemz - tamanho / 2 + tamanho)
-    Box5.setMaterial(redMaterial)
-    Box5.setDrawMode(DrawMode.LINE)
+    val Box5 = createBox(tamanho, origemx - tamanho / 2, origemy - tamanho / 2, origemz - tamanho / 2 + tamanho)
 
-    val Box6 = new Box(tamanho, tamanho, tamanho)
-    Box6.setTranslateX(origemx - tamanho / 2 + tamanho)
-    Box6.setTranslateY(origemy - tamanho / 2 + tamanho)
-    Box6.setTranslateZ(origemz - tamanho / 2 + tamanho)
-    Box6.setMaterial(redMaterial)
-    Box6.setDrawMode(DrawMode.LINE)
+    val Box6 = createBox(tamanho, origemx - tamanho / 2 + tamanho, origemy - tamanho / 2 + tamanho, origemz - tamanho / 2 + tamanho)
 
-    val Box7 = new Box(tamanho, tamanho, tamanho)
-    Box7.setTranslateX(origemx - tamanho / 2 + tamanho)
-    Box7.setTranslateY(origemy - tamanho / 2)
-    Box7.setTranslateZ(origemz - tamanho / 2 + tamanho)
-    Box7.setMaterial(redMaterial)
-    Box7.setDrawMode(DrawMode.LINE)
+    val Box7 = createBox(tamanho, origemx - tamanho / 2 + tamanho, origemy - tamanho / 2, origemz - tamanho / 2 + tamanho)
 
-    val Box8 = new Box(tamanho, tamanho, tamanho)
-    Box8.setTranslateX(origemx - tamanho / 2)
-    Box8.setTranslateY(origemy - tamanho / 2 + tamanho)
-    Box8.setTranslateZ(origemz - tamanho / 2 + tamanho)
-    Box8.setMaterial(redMaterial)
-    Box8.setDrawMode(DrawMode.LINE)
+    val Box8 = createBox(tamanho, origemx - tamanho / 2, origemy - tamanho / 2 + tamanho, origemz - tamanho / 2 + tamanho)
 
     if (Box1.asInstanceOf[Shape3D].getBoundsInParent.contains(cilindro.getBoundsInParent)) {
       root.getChildren.add(Box1)
       boxList += Box1
       val plc: Placement = ((Box1.getTranslateX - Box1.getWidth / 2.toDouble, Box1.getTranslateY - Box1.getWidth / 2.toDouble, Box1.getTranslateZ - Box1.getWidth / 2.toDouble), Box1.getWidth)
-      OcNode(plc, octreeDevelope2(Box1, cilindro, OctreeDimensions, root),OcEmpty, OcEmpty, OcEmpty, OcEmpty, OcEmpty, OcEmpty, OcEmpty)
+      OcNode(plc, octreeDevelope(Box1, cilindro, OctreeDimensions, root),OcEmpty, OcEmpty, OcEmpty, OcEmpty, OcEmpty, OcEmpty, OcEmpty)
 
     } else if (Box2.asInstanceOf[Shape3D].getBoundsInParent.contains(cilindro.getBoundsInParent)) {
       root.getChildren.add(Box2)
       boxList += Box2
       val plc: Placement = ((Box2.getTranslateX - Box2.getWidth / 2.toDouble, Box2.getTranslateY - Box2.getWidth / 2.toDouble, Box2.getTranslateZ - Box2.getWidth / 2.toDouble), Box2.getWidth)
-      OcNode(plc, OcEmpty, octreeDevelope2(Box2, cilindro, OctreeDimensions, root), OcEmpty,OcEmpty,OcEmpty,OcEmpty,OcEmpty,OcEmpty)
+      OcNode(plc, OcEmpty, octreeDevelope(Box2, cilindro, OctreeDimensions, root), OcEmpty,OcEmpty,OcEmpty,OcEmpty,OcEmpty,OcEmpty)
 
     } else if (Box3.asInstanceOf[Shape3D].getBoundsInParent.contains(cilindro.getBoundsInParent)) {
       root.getChildren.add(Box3)
       boxList += Box3
       val plc: Placement = ((Box3.getTranslateX - Box3.getWidth / 2.toDouble, Box3.getTranslateY - Box3.getWidth / 2.toDouble, Box3.getTranslateZ - Box3.getWidth / 2.toDouble), Box3.getWidth)
-      OcNode(plc, OcEmpty,OcEmpty, octreeDevelope2(Box3, cilindro, OctreeDimensions, root),OcEmpty,OcEmpty,OcEmpty,OcEmpty,OcEmpty)
+      OcNode(plc, OcEmpty,OcEmpty, octreeDevelope(Box3, cilindro, OctreeDimensions, root),OcEmpty,OcEmpty,OcEmpty,OcEmpty,OcEmpty)
 
     } else if (Box4.asInstanceOf[Shape3D].getBoundsInParent.contains(cilindro.getBoundsInParent)) {
       root.getChildren.add(Box4)
       boxList += Box4
       val plc: Placement = ((Box4.getTranslateX - Box4.getWidth / 2.toDouble, Box4.getTranslateY - Box4.getWidth / 2.toDouble, Box4.getTranslateZ - Box4.getWidth / 2.toDouble), Box4.getWidth)
-      OcNode(plc, OcEmpty, OcEmpty, OcEmpty, octreeDevelope2(Box4, cilindro, OctreeDimensions, root), OcEmpty, OcEmpty, OcEmpty, OcEmpty)
+      OcNode(plc, OcEmpty, OcEmpty, OcEmpty, octreeDevelope(Box4, cilindro, OctreeDimensions, root), OcEmpty, OcEmpty, OcEmpty, OcEmpty)
 
     }else if (Box5.asInstanceOf[Shape3D].getBoundsInParent.contains(cilindro.getBoundsInParent)) {
       root.getChildren.add(Box5)
       boxList += Box5
       val plc: Placement = ((Box5.getTranslateX - Box5.getWidth / 2.toDouble, Box5.getTranslateY - Box5.getWidth / 2.toDouble, Box5.getTranslateZ - Box5.getWidth / 2.toDouble), Box5.getWidth)
-      OcNode(plc, OcEmpty,OcEmpty,OcEmpty,OcEmpty, octreeDevelope2(Box5, cilindro, OctreeDimensions, root), OcEmpty,OcEmpty,OcEmpty)
+      OcNode(plc, OcEmpty,OcEmpty,OcEmpty,OcEmpty, octreeDevelope(Box5, cilindro, OctreeDimensions, root), OcEmpty,OcEmpty,OcEmpty)
 
     } else if (Box6.asInstanceOf[Shape3D].getBoundsInParent.contains(cilindro.getBoundsInParent)) {
       root.getChildren.add(Box6)
       boxList += Box6
       val plc: Placement = ((Box6.getTranslateX - Box6.getWidth / 2.toDouble, Box6.getTranslateY - Box6.getWidth / 2.toDouble, Box6.getTranslateZ - Box6.getWidth / 2.toDouble), Box6.getWidth)
-      OcNode(plc, OcEmpty,OcEmpty,OcEmpty,OcEmpty,OcEmpty, octreeDevelope2(Box6, cilindro, OctreeDimensions, root), OcEmpty,OcEmpty)
+      OcNode(plc, OcEmpty,OcEmpty,OcEmpty,OcEmpty,OcEmpty, octreeDevelope(Box6, cilindro, OctreeDimensions, root), OcEmpty,OcEmpty)
 
     } else if (Box7.asInstanceOf[Shape3D].getBoundsInParent.contains(cilindro.getBoundsInParent)) {
       root.getChildren.add(Box7)
       boxList += Box7
       val plc: Placement = ((Box7.getTranslateX - Box7.getWidth / 2.toDouble, Box7.getTranslateY - Box7.getWidth / 2.toDouble, Box7.getTranslateZ - Box7.getWidth / 2.toDouble), Box7.getWidth)
-      OcNode(plc, OcEmpty,OcEmpty,OcEmpty,OcEmpty,OcEmpty,OcEmpty, octreeDevelope2(Box7, cilindro, OctreeDimensions, root),OcEmpty)
+      OcNode(plc, OcEmpty,OcEmpty,OcEmpty,OcEmpty,OcEmpty,OcEmpty, octreeDevelope(Box7, cilindro, OctreeDimensions, root),OcEmpty)
 
     } else if (Box8.asInstanceOf[Shape3D].getBoundsInParent.contains(cilindro.getBoundsInParent)) {
       root.getChildren.add(Box8)
       boxList += Box8
       val plc: Placement = ((Box8.getTranslateX - Box8.getWidth / 2.toDouble, Box8.getTranslateY - Box8.getWidth / 2.toDouble, Box8.getTranslateZ - Box8.getWidth / 2.toDouble), Box8.getWidth)
-      OcNode(plc, OcEmpty,OcEmpty,OcEmpty,OcEmpty,OcEmpty,OcEmpty,OcEmpty, octreeDevelope2(Box8, cilindro, OctreeDimensions, root))
+      OcNode(plc, OcEmpty,OcEmpty,OcEmpty,OcEmpty,OcEmpty,OcEmpty,OcEmpty, octreeDevelope(Box8, cilindro, OctreeDimensions, root))
 
     } else if (cilindro.asInstanceOf[Shape3D].getBoundsInParent.intersects(Box1.getBoundsInParent)) {
       val plc: Placement = ((Box1.getTranslateX - Box1.getWidth / 2.toDouble, Box1.getTranslateY - Box1.getWidth / 2.toDouble, Box1.getTranslateZ - Box1.getWidth / 2.toDouble), Box1.getWidth)
@@ -262,6 +221,17 @@ class Main extends Application {
     } else {
       OcEmpty
     }
+  }
+
+  def createBox(tamanho: Int, scaleX: Int, scaleY: Int, scaleZ: Int): Box = {
+    val box = new Box(tamanho, tamanho, tamanho)
+    box.setTranslateX(scaleX)
+    box.setTranslateY(scaleY)
+    box.setTranslateZ(scaleZ)
+    box.setMaterial(redMaterial)
+    box.setDrawMode(DrawMode.LINE)
+
+    box
   }
 
   //Tarefa 3
