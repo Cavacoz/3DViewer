@@ -8,8 +8,8 @@ case class ObjectLoader() {
 
   type Point = (Double, Double, Double)
   type Size = Double
-  type Placement = (Point, Size) //1st point: origin, 2nd point: size
-  type Section = (Placement, List[Node])  //example: ( ((0.0,0.0,0.0), 2.0), List(new Cylinder(0.5, 1, 10)))
+  type Placement = (Point, Size)
+  type Section = (Placement, List[Node])
 
   def loadFromTextFile(file: String, root: Group, list: List[Shape3D]): List[Shape3D] = {
 
