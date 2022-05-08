@@ -15,8 +15,8 @@ import scala.collection.mutable.ListBuffer
 
 class Main extends Application {
 
-  val file = "C:\\Users\\My PC\\Desktop\\Grupo30_RuiCavaco_MiguelReis_InesComba\\conf3D.txt"
-  //val file = "/Users/miguelreis/Desktop/Universidade/2ºsemestre-2ºano/PPM/Projeto/Base_Project2Share/conf3D.txt"
+  //val file = "C:\\Users\\My PC\\Desktop\\Grupo30_RuiCavaco_MiguelReis_InesComba\\conf3D.txt"
+  val file = "/Users/miguelreis/Desktop/Universidade/2ºsemestre-2ºano/PPM/Projeto/Base_Project2Share/conf3D.txt"
   val octIns = ObjectLoader()
   var list3D = List[Shape3D]()
   val octreeEditor = OctreeEditor()
@@ -120,7 +120,7 @@ class Main extends Application {
 
     //Criação da OcTree
     val oct2:Octree[octreeEditor.Placement] = octreeEditor.octreeDevelope(wiredBox,list3D, 8.0, worldRoot)
-      //octreeDevelope(wiredBox, list3D.head.asInstanceOf[Node], 8.0, worldRoot)
+    println(oct2)
 
     //Mouse left click interaction
     scene.setOnMouseClicked(event => {

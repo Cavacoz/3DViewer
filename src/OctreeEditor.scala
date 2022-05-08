@@ -87,24 +87,30 @@ case class OctreeEditor() {
           OcNode(plc, OcEmpty,OcEmpty,OcEmpty,OcEmpty,OcEmpty,OcEmpty,OcEmpty, octreeDevelope(Box8, ObjectList, OctreeDimensions, root))
 
         } else { //Verificar se alguma das box intersete um elemento present na lista "ObjectList" ou não.
-          val boxList: List[Box] = List(Box1,Box2,Box3,Box4,Box5,Box6,Box7,Box8)
-          intersectsSituation(boxList, ObjectList:List[Shape3D],  null, null)
+          //val boxList: List[Box] = List(Box1,Box2,Box3,Box4,Box5,Box6,Box7,Box8)
+          val result:Octree[Placement] = intersectsSituation(PreBox, ObjectList:List[Shape3D])
+          println(result)
+          result
         }
     }
 
-  def intersectsSituation(BoxList: List[Box], ObjectList:List[Shape3D],  boxIntersects:Box, objectIntersects: Shape3D): Octree[Placement] = {
-    if(boxIntersects != null) { //Caso a "boxIntersects" não seja nula, ou seja, caso tenha sido encontrada uma box que de facto se intersete com um dos objetos presentes na "ObjectList", então a função da return de uma OcLeaf
-      val plc: Placement = ((boxIntersects.getTranslateX - boxIntersects.getWidth / 2.toDouble, boxIntersects.getTranslateY - boxIntersects.getWidth / 2.toDouble, boxIntersects.getTranslateZ - boxIntersects.getWidth / 2.toDouble), boxIntersects.getWidth)
-      val sec: Section = (plc, List(objectIntersects))
-      OcLeaf(sec)
-    }
+  def intersectsSituation(PreBox: Box, ObjectList:List[Shape3D]): Octree[Placement] = {
     ObjectList match {
       case Nil => {
         OcEmpty //Caso a lista de objetos esteja vazia ou não tenha sido encontrada nenhuma box que intersete um objeto
       }
-      case head::tail =>
-        intersectsSituation(BoxList, tail, intersects(BoxList, head), head)
-        //Caso a lista das box não esteja vazia, esta irá se chamar recursivamente até encontrar ou não uma box que intersete um dos objetos presentes na lista "ObjectList"
+      case head::tail => {
+        if(head.getBoundsInParent.intersects(PreBox.getBoundsInParent)) { //Caso a "boxIntersects" não seja nula, ou seja, caso tenha sido encontrada uma box que de facto se intersete com um dos objetos presentes na "ObjectList", então a função da return de uma OcLeaf
+          //val boxIntersects:Box = intersects(BoxList, head)
+          val plc: Placement = ((PreBox.getTranslateX - PreBox.getWidth / 2.toDouble, PreBox.getTranslateY - PreBox.getWidth / 2.toDouble, PreBox.getTranslateZ - PreBox.getWidth / 2.toDouble), PreBox.getWidth)
+          val sec: Section = (plc, List(head))
+          println("Criação da OcLeaf" + sec)
+          OcLeaf(sec)
+        } else {
+          intersectsSituation(PreBox, tail)
+          //Caso a lista das box não esteja vazia, esta irá se chamar recursivamente até encontrar ou não uma box que intersete um dos objetos presentes na lista "ObjectList"
+        }
+      }
     }
   }
 
@@ -113,8 +119,10 @@ case class OctreeEditor() {
     boxList match {
       case Nil => null
       case headBox::tail => {
-        if (objeto.getBoundsInParent.intersects(headBox.getBoundsInParent))
-          headBox // Se a headBox intersetar o objeto, então retorna a propria headBox
+        if (objeto.getBoundsInParent.intersects(headBox.getBoundsInParent)) {
+          println("Foi encontrada a caixa" + headBox)
+          headBox
+        } // Se a headBox intersetar o objeto, então retorna a propria headBox
         else
           intersects(tail, objeto) //Caso não intersete, continua a invocar a função recursivamente
       }
