@@ -119,7 +119,7 @@ class Main extends Application {
     stage.show
 
     //Criação da OcTree
-    val oct2:Octree[octreeEditor.Placement] = octreeEditor.octreeDevelope(wiredBox,list3D.head.asInstanceOf[Node], 8.0, worldRoot)
+    val oct2:Octree[octreeEditor.Placement] = octreeEditor.octreeDevelope(wiredBox,list3D, 8.0, worldRoot)
       //octreeDevelope(wiredBox, list3D.head.asInstanceOf[Node], 8.0, worldRoot)
 
     //Mouse left click interaction
