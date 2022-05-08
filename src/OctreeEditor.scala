@@ -22,87 +22,129 @@ case class OctreeEditor() {
   blueMaterial.setDiffuseColor(Color.rgb(0,0,255))
 
   //Tarefa 2
-  def octreeDevelope(PreBox:Box, cilindro:Node, OctreeDimensions:Double, root:Group): Octree[Placement] = {
+  def octreeDevelope(PreBox:Box, ObjectList:List[Shape3D], OctreeDimensions:Double, root:Group): Octree[Placement] = {
+        val tamanho: Int = PreBox.getWidth.toInt / 2
+        val origemx: Int = PreBox.getTranslateX.toInt
+        val origemy: Int = PreBox.getTranslateY.toInt
+        val origemz: Int = PreBox.getTranslateZ.toInt
 
-    val tamanho: Int = PreBox.getWidth.toInt / 2
-    val origemx: Int = PreBox.getTranslateX.toInt
-    val origemy: Int = PreBox.getTranslateY.toInt
-    val origemz: Int = PreBox.getTranslateZ.toInt
+        //Criação das caixas que dividem o Cubo "Pai" em 8 "filhos"
+        val Box1 = createBox(tamanho, origemx - tamanho / 2, origemy - tamanho / 2, tamanho / 2)
+        val Box2 = createBox(tamanho, origemx - tamanho / 2 + tamanho, origemy - tamanho / 2 + tamanho, origemz - tamanho / 2)
+        val Box3 = createBox(tamanho, origemx - tamanho / 2 + tamanho, origemy - tamanho / 2, origemz - tamanho / 2)
+        val Box4 = createBox(tamanho, origemx - tamanho / 2, origemy - tamanho / 2 + tamanho, origemz - tamanho / 2)
+        val Box5 = createBox(tamanho, origemx - tamanho / 2, origemy - tamanho / 2, origemz - tamanho / 2 + tamanho)
+        val Box6 = createBox(tamanho, origemx - tamanho / 2 + tamanho, origemy - tamanho / 2 + tamanho, origemz - tamanho / 2 + tamanho)
+        val Box7 = createBox(tamanho, origemx - tamanho / 2 + tamanho, origemy - tamanho / 2, origemz - tamanho / 2 + tamanho)
+        val Box8 = createBox(tamanho, origemx - tamanho / 2, origemy - tamanho / 2 + tamanho, origemz - tamanho / 2 + tamanho)
 
-    val Box1 = createBox(tamanho, origemx - tamanho / 2, origemy - tamanho / 2, tamanho / 2)
+        if (conectionSituation(Box1, ObjectList, 0,0, null) != null) {
+          root.getChildren.add(Box1)
+          boxList += Box1
+          val plc: Placement = ((Box1.getTranslateX - Box1.getWidth / 2.toDouble, Box1.getTranslateY - Box1.getWidth / 2.toDouble, Box1.getTranslateZ - Box1.getWidth / 2.toDouble), Box1.getWidth)
+          OcNode(plc, octreeDevelope(Box1, ObjectList, OctreeDimensions, root),OcEmpty, OcEmpty, OcEmpty, OcEmpty, OcEmpty, OcEmpty, OcEmpty)
 
-    val Box2 = createBox(tamanho, origemx - tamanho / 2 + tamanho, origemy - tamanho / 2 + tamanho, origemz - tamanho / 2)
+        } else if (conectionSituation(Box2, ObjectList, 0,0, null) != null) {
+          root.getChildren.add(Box2)
+          boxList += Box2
+          val plc: Placement = ((Box2.getTranslateX - Box2.getWidth / 2.toDouble, Box2.getTranslateY - Box2.getWidth / 2.toDouble, Box2.getTranslateZ - Box2.getWidth / 2.toDouble), Box2.getWidth)
+          OcNode(plc, OcEmpty, octreeDevelope(Box2, ObjectList, OctreeDimensions, root), OcEmpty,OcEmpty,OcEmpty,OcEmpty,OcEmpty,OcEmpty)
 
-    val Box3 = createBox(tamanho, origemx - tamanho / 2 + tamanho, origemy - tamanho / 2, origemz - tamanho / 2)
+        } else if (conectionSituation(Box3, ObjectList, 0,0, null) != null) {
+          root.getChildren.add(Box3)
+          boxList += Box3
+          val plc: Placement = ((Box3.getTranslateX - Box3.getWidth / 2.toDouble, Box3.getTranslateY - Box3.getWidth / 2.toDouble, Box3.getTranslateZ - Box3.getWidth / 2.toDouble), Box3.getWidth)
+          OcNode(plc, OcEmpty,OcEmpty, octreeDevelope(Box3, ObjectList, OctreeDimensions, root),OcEmpty,OcEmpty,OcEmpty,OcEmpty,OcEmpty)
 
-    val Box4 = createBox(tamanho, origemx - tamanho / 2, origemy - tamanho / 2 + tamanho, origemz - tamanho / 2)
+        } else if (conectionSituation(Box4, ObjectList, 0,0, null) != null) {
+          root.getChildren.add(Box4)
+          boxList += Box4
+          val plc: Placement = ((Box4.getTranslateX - Box4.getWidth / 2.toDouble, Box4.getTranslateY - Box4.getWidth / 2.toDouble, Box4.getTranslateZ - Box4.getWidth / 2.toDouble), Box4.getWidth)
+          OcNode(plc, OcEmpty, OcEmpty, OcEmpty, octreeDevelope(Box4, ObjectList, OctreeDimensions, root), OcEmpty, OcEmpty, OcEmpty, OcEmpty)
 
-    val Box5 = createBox(tamanho, origemx - tamanho / 2, origemy - tamanho / 2, origemz - tamanho / 2 + tamanho)
+        }else if (conectionSituation(Box5, ObjectList, 0,0, null) != null) {
+          root.getChildren.add(Box5)
+          boxList += Box5
+          val plc: Placement = ((Box5.getTranslateX - Box5.getWidth / 2.toDouble, Box5.getTranslateY - Box5.getWidth / 2.toDouble, Box5.getTranslateZ - Box5.getWidth / 2.toDouble), Box5.getWidth)
+          OcNode(plc, OcEmpty,OcEmpty,OcEmpty,OcEmpty, octreeDevelope(Box5, ObjectList, OctreeDimensions, root), OcEmpty,OcEmpty,OcEmpty)
 
-    val Box6 = createBox(tamanho, origemx - tamanho / 2 + tamanho, origemy - tamanho / 2 + tamanho, origemz - tamanho / 2 + tamanho)
+        } else if (conectionSituation(Box6, ObjectList, 0,0, null) != null) {
+          root.getChildren.add(Box6)
+          boxList += Box6
+          val plc: Placement = ((Box6.getTranslateX - Box6.getWidth / 2.toDouble, Box6.getTranslateY - Box6.getWidth / 2.toDouble, Box6.getTranslateZ - Box6.getWidth / 2.toDouble), Box6.getWidth)
+          OcNode(plc, OcEmpty,OcEmpty,OcEmpty,OcEmpty,OcEmpty, octreeDevelope(Box6, ObjectList, OctreeDimensions, root), OcEmpty,OcEmpty)
 
-    val Box7 = createBox(tamanho, origemx - tamanho / 2 + tamanho, origemy - tamanho / 2, origemz - tamanho / 2 + tamanho)
+        } else if (conectionSituation(Box7, ObjectList, 0,0, null) != null) {
+          root.getChildren.add(Box7)
+          boxList += Box7
+          val plc: Placement = ((Box7.getTranslateX - Box7.getWidth / 2.toDouble, Box7.getTranslateY - Box7.getWidth / 2.toDouble, Box7.getTranslateZ - Box7.getWidth / 2.toDouble), Box7.getWidth)
+          OcNode(plc, OcEmpty,OcEmpty,OcEmpty,OcEmpty,OcEmpty,OcEmpty, octreeDevelope(Box7, ObjectList, OctreeDimensions, root),OcEmpty)
 
-    val Box8 = createBox(tamanho, origemx - tamanho / 2, origemy - tamanho / 2 + tamanho, origemz - tamanho / 2 + tamanho)
+        } else if (conectionSituation(Box8, ObjectList, 0,0, null) != null) {
+          root.getChildren.add(Box8)
+          boxList += Box8
+          val plc: Placement = ((Box8.getTranslateX - Box8.getWidth / 2.toDouble, Box8.getTranslateY - Box8.getWidth / 2.toDouble, Box8.getTranslateZ - Box8.getWidth / 2.toDouble), Box8.getWidth)
+          OcNode(plc, OcEmpty,OcEmpty,OcEmpty,OcEmpty,OcEmpty,OcEmpty,OcEmpty, octreeDevelope(Box8, ObjectList, OctreeDimensions, root))
 
-    if (Box1.asInstanceOf[Shape3D].getBoundsInParent.contains(cilindro.getBoundsInParent)) {
-      root.getChildren.add(Box1)
-      boxList += Box1
-      val plc: Placement = ((Box1.getTranslateX - Box1.getWidth / 2.toDouble, Box1.getTranslateY - Box1.getWidth / 2.toDouble, Box1.getTranslateZ - Box1.getWidth / 2.toDouble), Box1.getWidth)
-      OcNode(plc, octreeDevelope(Box1, cilindro, OctreeDimensions, root),OcEmpty, OcEmpty, OcEmpty, OcEmpty, OcEmpty, OcEmpty, OcEmpty)
+        } else { //Verificar se alguma das box intersete um elemento present na lista "ObjectList" ou não.
+          val boxList: List[Box] = List(Box1,Box2,Box3,Box4,Box5,Box6,Box7,Box8)
+          intersectsSituation(boxList, ObjectList:List[Shape3D],  null, null)
+        }
+    }
 
-    } else if (Box2.asInstanceOf[Shape3D].getBoundsInParent.contains(cilindro.getBoundsInParent)) {
-      root.getChildren.add(Box2)
-      boxList += Box2
-      val plc: Placement = ((Box2.getTranslateX - Box2.getWidth / 2.toDouble, Box2.getTranslateY - Box2.getWidth / 2.toDouble, Box2.getTranslateZ - Box2.getWidth / 2.toDouble), Box2.getWidth)
-      OcNode(plc, OcEmpty, octreeDevelope(Box2, cilindro, OctreeDimensions, root), OcEmpty,OcEmpty,OcEmpty,OcEmpty,OcEmpty,OcEmpty)
-
-    } else if (Box3.asInstanceOf[Shape3D].getBoundsInParent.contains(cilindro.getBoundsInParent)) {
-      root.getChildren.add(Box3)
-      boxList += Box3
-      val plc: Placement = ((Box3.getTranslateX - Box3.getWidth / 2.toDouble, Box3.getTranslateY - Box3.getWidth / 2.toDouble, Box3.getTranslateZ - Box3.getWidth / 2.toDouble), Box3.getWidth)
-      OcNode(plc, OcEmpty,OcEmpty, octreeDevelope(Box3, cilindro, OctreeDimensions, root),OcEmpty,OcEmpty,OcEmpty,OcEmpty,OcEmpty)
-
-    } else if (Box4.asInstanceOf[Shape3D].getBoundsInParent.contains(cilindro.getBoundsInParent)) {
-      root.getChildren.add(Box4)
-      boxList += Box4
-      val plc: Placement = ((Box4.getTranslateX - Box4.getWidth / 2.toDouble, Box4.getTranslateY - Box4.getWidth / 2.toDouble, Box4.getTranslateZ - Box4.getWidth / 2.toDouble), Box4.getWidth)
-      OcNode(plc, OcEmpty, OcEmpty, OcEmpty, octreeDevelope(Box4, cilindro, OctreeDimensions, root), OcEmpty, OcEmpty, OcEmpty, OcEmpty)
-
-    }else if (Box5.asInstanceOf[Shape3D].getBoundsInParent.contains(cilindro.getBoundsInParent)) {
-      root.getChildren.add(Box5)
-      boxList += Box5
-      val plc: Placement = ((Box5.getTranslateX - Box5.getWidth / 2.toDouble, Box5.getTranslateY - Box5.getWidth / 2.toDouble, Box5.getTranslateZ - Box5.getWidth / 2.toDouble), Box5.getWidth)
-      OcNode(plc, OcEmpty,OcEmpty,OcEmpty,OcEmpty, octreeDevelope(Box5, cilindro, OctreeDimensions, root), OcEmpty,OcEmpty,OcEmpty)
-
-    } else if (Box6.asInstanceOf[Shape3D].getBoundsInParent.contains(cilindro.getBoundsInParent)) {
-      root.getChildren.add(Box6)
-      boxList += Box6
-      val plc: Placement = ((Box6.getTranslateX - Box6.getWidth / 2.toDouble, Box6.getTranslateY - Box6.getWidth / 2.toDouble, Box6.getTranslateZ - Box6.getWidth / 2.toDouble), Box6.getWidth)
-      OcNode(plc, OcEmpty,OcEmpty,OcEmpty,OcEmpty,OcEmpty, octreeDevelope(Box6, cilindro, OctreeDimensions, root), OcEmpty,OcEmpty)
-
-    } else if (Box7.asInstanceOf[Shape3D].getBoundsInParent.contains(cilindro.getBoundsInParent)) {
-      root.getChildren.add(Box7)
-      boxList += Box7
-      val plc: Placement = ((Box7.getTranslateX - Box7.getWidth / 2.toDouble, Box7.getTranslateY - Box7.getWidth / 2.toDouble, Box7.getTranslateZ - Box7.getWidth / 2.toDouble), Box7.getWidth)
-      OcNode(plc, OcEmpty,OcEmpty,OcEmpty,OcEmpty,OcEmpty,OcEmpty, octreeDevelope(Box7, cilindro, OctreeDimensions, root),OcEmpty)
-
-    } else if (Box8.asInstanceOf[Shape3D].getBoundsInParent.contains(cilindro.getBoundsInParent)) {
-      root.getChildren.add(Box8)
-      boxList += Box8
-      val plc: Placement = ((Box8.getTranslateX - Box8.getWidth / 2.toDouble, Box8.getTranslateY - Box8.getWidth / 2.toDouble, Box8.getTranslateZ - Box8.getWidth / 2.toDouble), Box8.getWidth)
-      OcNode(plc, OcEmpty,OcEmpty,OcEmpty,OcEmpty,OcEmpty,OcEmpty,OcEmpty, octreeDevelope(Box8, cilindro, OctreeDimensions, root))
-
-    } else if (cilindro.asInstanceOf[Shape3D].getBoundsInParent.intersects(Box1.getBoundsInParent)) {
-      val plc: Placement = ((Box1.getTranslateX - Box1.getWidth / 2.toDouble, Box1.getTranslateY - Box1.getWidth / 2.toDouble, Box1.getTranslateZ - Box1.getWidth / 2.toDouble), Box1.getWidth)
-      val sec: Section = (plc, List(cilindro))
+  def intersectsSituation(BoxList: List[Box], ObjectList:List[Shape3D],  boxIntersects:Box, objectIntersects: Shape3D): Octree[Placement] = {
+    if(boxIntersects != null) { //Caso a "boxIntersects" não seja nula, ou seja, caso tenha sido encontrada uma box que de facto se intersete com um dos objetos presentes na "ObjectList", então a função da return de uma OcLeaf
+      val plc: Placement = ((boxIntersects.getTranslateX - boxIntersects.getWidth / 2.toDouble, boxIntersects.getTranslateY - boxIntersects.getWidth / 2.toDouble, boxIntersects.getTranslateZ - boxIntersects.getWidth / 2.toDouble), boxIntersects.getWidth)
+      val sec: Section = (plc, List(objectIntersects))
       OcLeaf(sec)
-
-    } else {
-      OcEmpty
+    }
+    ObjectList match {
+      case Nil => {
+        OcEmpty //Caso a lista de objetos esteja vazia ou não tenha sido encontrada nenhuma box que intersete um objeto
+      }
+      case head::tail =>
+        intersectsSituation(BoxList, tail, intersects(BoxList, head), head)
+        //Caso a lista das box não esteja vazia, esta irá se chamar recursivamente até encontrar ou não uma box que intersete um dos objetos presentes na lista "ObjectList"
     }
   }
 
+  //Função que verifica se determinado cubo interseta um objeto
+  def intersects(boxList:List[Box], objeto:Shape3D): Box = {
+    boxList match {
+      case Nil => null
+      case headBox::tail => {
+        if (objeto.getBoundsInParent.intersects(headBox.getBoundsInParent))
+          headBox // Se a headBox intersetar o objeto, então retorna a propria headBox
+        else
+          intersects(tail, objeto) //Caso não intersete, continua a invocar a função recursivamente
+      }
+    }
+  }
+
+
+  //Função que verifica se determinada caixa, contêm/interseta outro.
+  def conectionSituation(box: Box, ObjectList:List[Shape3D], contains:Int, intersects:Int, objeto:Shape3D): Shape3D = {
+    ObjectList match {
+      case Nil => {
+        if (intersects == 0 && contains != 0) {
+          objeto //Caso a box não intersete nenhum objeto e contenha algum
+        } else{
+          null //Caso a box intersete um objeto ou não intersete nenhum objeto e não contenha nenhum
+        }
+      }
+      case head :: tail => {
+        if (box.asInstanceOf[Shape3D].getBoundsInParent.contains(head.getBoundsInParent)) {
+          conectionSituation(box: Box, tail, contains + 1, intersects, head)
+        } else if (head.getBoundsInParent.intersects(box.getBoundsInParent)) {
+          conectionSituation(box: Box, tail, contains, intersects + 1, objeto)
+        } else {
+          conectionSituation(box: Box, tail, contains, intersects, objeto)
+        }
+      }
+    }
+  }
+
+  //Função para criar as Box
   def createBox(tamanho: Int, scaleX: Int, scaleY: Int, scaleZ: Int): Box = {
     val box = new Box(tamanho, tamanho, tamanho)
     box.setTranslateX(scaleX)
