@@ -119,16 +119,20 @@ class Main extends Application {
     stage.show
 
     //Criação da OcTree
-    val oct2:Octree[octreeEditor.Placement] = octreeEditor.octreeDevelope(wiredBox,list3D, 8.0, worldRoot)
+    worldRoot.getChildren.add(wiredBox)
+    val plc:octreeEditor.Placement = ((wiredBox.getTranslateX - wiredBox.getWidth / 2,wiredBox.getTranslateY - wiredBox.getWidth / 2, wiredBox.getTranslateZ - wiredBox.getWidth / 2), wiredBox.getWidth)
+    val octree: Octree[octreeEditor.Placement] = OcNode(plc, OcEmpty, OcEmpty, OcEmpty, OcEmpty, OcEmpty, OcEmpty, OcEmpty, OcEmpty)
+
+    val oct2:Octree[octreeEditor.Placement] = octreeEditor.octreeDevelope(wiredBox,list3D, 8.0, worldRoot, octree)
     println(oct2)
 
     //Mouse left click interaction
     scene.setOnMouseClicked(event => {
       camVolume.setTranslateX(camVolume.getTranslateX + 2)
 
-      octreeEditor.updateViewColors(camVolume, oct2)
+      //octreeEditor.updateViewColors(camVolume, oct2)
 
-      octreeEditor.scaleOctree(2.0, oct2)
+      //octreeEditor.scaleOctree(2.0, oct2)
 
       worldRoot.getChildren.removeAll()
 

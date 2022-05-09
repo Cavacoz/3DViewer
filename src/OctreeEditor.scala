@@ -22,6 +22,7 @@ case class OctreeEditor() {
   blueMaterial.setDiffuseColor(Color.rgb(0,0,255))
 
   //Tarefa 2
+ /*
   def octreeDevelope(PreBox:Box, ObjectList:List[Shape3D], OctreeDimensions:Double, root:Group): Octree[Placement] = {
         val tamanho: Int = PreBox.getWidth.toInt / 2
         val origemx: Int = PreBox.getTranslateX.toInt
@@ -44,11 +45,13 @@ case class OctreeEditor() {
           val plc: Placement = ((Box1.getTranslateX - Box1.getWidth / 2.toDouble, Box1.getTranslateY - Box1.getWidth / 2.toDouble, Box1.getTranslateZ - Box1.getWidth / 2.toDouble), Box1.getWidth)
           OcNode(plc, octreeDevelope(Box1, ObjectList, OctreeDimensions, root),OcEmpty, OcEmpty, OcEmpty, OcEmpty, OcEmpty, OcEmpty, OcEmpty)
 
+
         } else if (conectionSituation(Box2, ObjectList, 0,0, null) != null) {
           root.getChildren.add(Box2)
           boxList += Box2
           val plc: Placement = ((Box2.getTranslateX - Box2.getWidth / 2.toDouble, Box2.getTranslateY - Box2.getWidth / 2.toDouble, Box2.getTranslateZ - Box2.getWidth / 2.toDouble), Box2.getWidth)
           OcNode(plc, OcEmpty, octreeDevelope(Box2, ObjectList, OctreeDimensions, root), OcEmpty,OcEmpty,OcEmpty,OcEmpty,OcEmpty,OcEmpty)
+
 
         } else if (conectionSituation(Box3, ObjectList, 0,0, null) != null) {
           root.getChildren.add(Box3)
@@ -56,11 +59,13 @@ case class OctreeEditor() {
           val plc: Placement = ((Box3.getTranslateX - Box3.getWidth / 2.toDouble, Box3.getTranslateY - Box3.getWidth / 2.toDouble, Box3.getTranslateZ - Box3.getWidth / 2.toDouble), Box3.getWidth)
           OcNode(plc, OcEmpty,OcEmpty, octreeDevelope(Box3, ObjectList, OctreeDimensions, root),OcEmpty,OcEmpty,OcEmpty,OcEmpty,OcEmpty)
 
+
         } else if (conectionSituation(Box4, ObjectList, 0,0, null) != null) {
           root.getChildren.add(Box4)
           boxList += Box4
           val plc: Placement = ((Box4.getTranslateX - Box4.getWidth / 2.toDouble, Box4.getTranslateY - Box4.getWidth / 2.toDouble, Box4.getTranslateZ - Box4.getWidth / 2.toDouble), Box4.getWidth)
           OcNode(plc, OcEmpty, OcEmpty, OcEmpty, octreeDevelope(Box4, ObjectList, OctreeDimensions, root), OcEmpty, OcEmpty, OcEmpty, OcEmpty)
+
 
         }else if (conectionSituation(Box5, ObjectList, 0,0, null) != null) {
           root.getChildren.add(Box5)
@@ -74,11 +79,13 @@ case class OctreeEditor() {
           val plc: Placement = ((Box6.getTranslateX - Box6.getWidth / 2.toDouble, Box6.getTranslateY - Box6.getWidth / 2.toDouble, Box6.getTranslateZ - Box6.getWidth / 2.toDouble), Box6.getWidth)
           OcNode(plc, OcEmpty,OcEmpty,OcEmpty,OcEmpty,OcEmpty, octreeDevelope(Box6, ObjectList, OctreeDimensions, root), OcEmpty,OcEmpty)
 
+
         } else if (conectionSituation(Box7, ObjectList, 0,0, null) != null) {
           root.getChildren.add(Box7)
           boxList += Box7
           val plc: Placement = ((Box7.getTranslateX - Box7.getWidth / 2.toDouble, Box7.getTranslateY - Box7.getWidth / 2.toDouble, Box7.getTranslateZ - Box7.getWidth / 2.toDouble), Box7.getWidth)
           OcNode(plc, OcEmpty,OcEmpty,OcEmpty,OcEmpty,OcEmpty,OcEmpty, octreeDevelope(Box7, ObjectList, OctreeDimensions, root),OcEmpty)
+
 
         } else if (conectionSituation(Box8, ObjectList, 0,0, null) != null) {
           root.getChildren.add(Box8)
@@ -89,38 +96,192 @@ case class OctreeEditor() {
         } else { //Verificar se alguma das box intersete um elemento present na lista "ObjectList" ou não.
           //val boxList: List[Box] = List(Box1,Box2,Box3,Box4,Box5,Box6,Box7,Box8)
           val result:Octree[Placement] = intersectsSituation(PreBox, ObjectList:List[Shape3D])
-          println(result)
           result
         }
     }
 
-  def intersectsSituation(PreBox: Box, ObjectList:List[Shape3D]): Octree[Placement] = {
-    ObjectList match {
-      case Nil => {
-        OcEmpty //Caso a lista de objetos esteja vazia ou não tenha sido encontrada nenhuma box que intersete um objeto
+  */
+
+
+
+
+
+  //Tarefa2
+  def octreeDevelope(preBox:Box, ObjectList:List[Shape3D], OctreeDimensions:Double, root:Group, octree:Octree[Placement]):Octree[Placement] = {
+        val tamanho: Int = preBox.getWidth.toInt / 2
+        val origemx: Int = preBox.getTranslateX.toInt
+        val origemy: Int = preBox.getTranslateY.toInt
+        val origemz: Int = preBox.getTranslateZ.toInt
+        //Criação das caixas que dividem o Cubo "Pai" em 8 "filhos"
+        val Box1 = createBox(tamanho, origemx - tamanho / 2, origemy - tamanho / 2, tamanho / 2)
+        val Box2 = createBox(tamanho, origemx - tamanho / 2 + tamanho, origemy - tamanho / 2 + tamanho, origemz - tamanho / 2)
+        val Box3 = createBox(tamanho, origemx - tamanho / 2 + tamanho, origemy - tamanho / 2, origemz - tamanho / 2)
+        val Box4 = createBox(tamanho, origemx - tamanho / 2, origemy - tamanho / 2 + tamanho, origemz - tamanho / 2)
+        val Box5 = createBox(tamanho, origemx - tamanho / 2, origemy - tamanho / 2, origemz - tamanho / 2 + tamanho)
+        val Box6 = createBox(tamanho, origemx - tamanho / 2 + tamanho, origemy - tamanho / 2 + tamanho, origemz - tamanho / 2 + tamanho)
+        val Box7 = createBox(tamanho, origemx - tamanho / 2 + tamanho, origemy - tamanho / 2, origemz - tamanho / 2 + tamanho)
+        val Box8 = createBox(tamanho, origemx - tamanho / 2, origemy - tamanho / 2 + tamanho, origemz - tamanho / 2 + tamanho)
+
+        val listWiredBox:List[Box] = List(Box1,Box2,Box3,Box4,Box5,Box6,Box7,Box8)
+        createWiredList(listWiredBox,ObjectList, root) //Devolve uma lista de wiredBox que contenham Objetos, e adiciona as wiredBox à root
+        val wiredBoxNumber:List[Int] = createNumberList(listWiredBox,ObjectList,1) //Devolve uma lista com o numero das box da lista acima.
+
+        if (checkForConnections(listWiredBox, ObjectList, 0, 0) == 2) {
+          return intersectsSituation(preBox, ObjectList)
+        }
+
+        if (checkForConnections(listWiredBox, ObjectList, 0, 0) == 1) {
+          //chama a função recursivamente com a octree defenida
+          return nodeDevelope(wiredBoxNumber, octree, listWiredBox, ObjectList, root, OctreeDimensions)
+        }
+        OcEmpty
+  }
+
+  def checkForConnections(wiredList:List[Box], objectlist: List[Shape3D], intersection: Int, contains:Int): Int = {
+    wiredList match {
+      case Nil =>
+        if(intersection == 0 && contains!=0) {
+          return 1
+        }
+        if (intersection !=0) {
+          return 2
+        }
+        0
+      case x::xs =>
+        if(conectionSituation(x, objectlist, 0,0) == 2) {
+          return checkForConnections(xs, objectlist, intersection +1, contains)
+        }
+        if(conectionSituation(x, objectlist, 0,0) == 1) {
+          return checkForConnections(xs, objectlist, intersection , contains +1)
+        }
+        checkForConnections(xs, objectlist, intersection, contains)
+    }
+  }
+  def createWiredList(wiredList:List[Box], objectlist: List[Shape3D], root:Group): List[Box] = {
+    wiredList match {
+      case Nil => Nil
+      case x::xs =>
+        if(conectionSituation(x, objectlist, 0,0) == 1) {
+          root.getChildren.add(x)
+          boxList += x
+          return x::createWiredList(xs, objectlist, root)
+        }
+          createWiredList(xs, objectlist, root)
+    }
+  }
+  def createNumberList(wiredList:List[Box], objectlist: List[Shape3D], iteration:Int): List[Int] = {
+    wiredList match {
+      case Nil => Nil
+      case x::xs =>
+        //println(conectionSituation(x, objectlist, 0,0)) //Imprime a conexão da caixa com um objeto presente na lista
+        if(conectionSituation(x, objectlist, 0,0) == 1) {
+          //println("Box" + iteration + "Contêm um objeto")
+          return iteration::createNumberList(xs, objectlist, iteration+1)
+        }
+        createNumberList(xs, objectlist, iteration+1)
+    }
+  }
+  def nodeDevelope(wiredBoxNumberList:List[Int], octree:Octree[Placement], wiredBoxList:List[Box], objectList:List[Shape3D], root:Group, octreeDimensions:Double): Octree[Placement] = {
+    wiredBoxNumberList match {
+      case Nil => octree
+      case x::xs=> {
+            val resultOctree:Octree[Placement] = nodeDevelope2(x,octree, wiredBoxList, objectList, root, octreeDimensions)
+            nodeDevelope(xs,resultOctree, wiredBoxList, objectList, root, octreeDimensions)
       }
-      case head::tail => {
-        if(head.getBoundsInParent.intersects(PreBox.getBoundsInParent)) { //Caso a "boxIntersects" não seja nula, ou seja, caso tenha sido encontrada uma box que de facto se intersete com um dos objetos presentes na "ObjectList", então a função da return de uma OcLeaf
-          //val boxIntersects:Box = intersects(BoxList, head)
-          val plc: Placement = ((PreBox.getTranslateX - PreBox.getWidth / 2.toDouble, PreBox.getTranslateY - PreBox.getWidth / 2.toDouble, PreBox.getTranslateZ - PreBox.getWidth / 2.toDouble), PreBox.getWidth)
-          val sec: Section = (plc, List(head))
-          println("Criação da OcLeaf" + sec)
-          OcLeaf(sec)
+    }
+  }
+  def nodeDevelope2(boxNumber:Int, octree: Octree[Placement], wiredBoxList:List[Box], objectList:List[Shape3D], root:Group, octreeDimensions:Double): Octree[Placement] = {
+    octree match {
+      case OcEmpty => octree
+      case OcNode(plc,node1,node2,node3,node4,node5,node6,node7,node8) => {
+        val box:Box = nodeDevelope3(boxNumber,wiredBoxList, 1)
+        val plcBox: Placement = ((box.getTranslateX - box.getWidth / 2.toDouble, box.getTranslateY - box.getWidth / 2.toDouble, box.getTranslateZ - box.getWidth / 2.toDouble), box.getWidth)
+        val secondOctree:Octree[Placement] = OcNode(plcBox, OcEmpty, OcEmpty, OcEmpty, OcEmpty, OcEmpty, OcEmpty, OcEmpty, OcEmpty)
+        if(boxNumber==1){
+          OcNode(plc, octreeDevelope(box, objectList,octreeDimensions - 1, root, secondOctree),node2, node3, node4, node5, node6, node7, node8)
+        } else if(boxNumber==2) {
+          OcNode(plc, node1,octreeDevelope(box, objectList,octreeDimensions - 1, root, secondOctree), node3, node4, node5, node6, node7, node8)
+        } else if(boxNumber==3) {
+          OcNode(plc, node1,node2, octreeDevelope(box, objectList,octreeDimensions - 1, root, secondOctree), node4, node5, node6, node7, node8)
+        } else if(boxNumber==4) {
+          OcNode(plc, node1,node2, node3, octreeDevelope(box, objectList,octreeDimensions - 1, root, secondOctree), node5, node6, node7, node8)
+        } else if(boxNumber==5) {
+          OcNode(plc, node1,node2, node3, node4, octreeDevelope(box, objectList,octreeDimensions - 1, root, secondOctree), node6, node7, node8)
+        } else if(boxNumber==6) {
+          OcNode(plc, node1,node2, node3, node4, node5, octreeDevelope(box, objectList,octreeDimensions - 1, root, secondOctree), node7, node8)
+        } else if(boxNumber==7) {
+          OcNode(plc, node1,node2, node3, node4, node5, node6, octreeDevelope(box, objectList,octreeDimensions - 1, root, secondOctree), node8)
+        } else if(boxNumber==8) {
+          OcNode(plc, node1,node2, node3, node4, node5, node6, node7, octreeDevelope(box, objectList,octreeDimensions - 1, root, secondOctree))
         } else {
-          intersectsSituation(PreBox, tail)
-          //Caso a lista das box não esteja vazia, esta irá se chamar recursivamente até encontrar ou não uma box que intersete um dos objetos presentes na lista "ObjectList"
+          OcEmpty
+        }
+      }
+    }
+  }
+  def nodeDevelope3(i: Int, value: List[Box], iterationnumber:Int): Box = {
+    value match {
+      case Nil => null
+      case x::xs => {
+        if(iterationnumber==i) {
+          x
+        } else {
+          nodeDevelope3(i, xs, iterationnumber + 1)
         }
       }
     }
   }
 
+  /*
+  def iterationteste(Octree: Octree[Placement], arrayBox: Array[Box], iteration:Int):Octree[Placement] = {
+    arrayBox match {
+      case null => Octree
+      case x::xs => {
+        if(x!=null)
+      }
+    }
+  }
+   */
+
+
+
+  def intersectsSituation(PreBox: Box, ObjectList:List[Shape3D]): Octree[Placement] = {
+    ObjectList match {
+      case head::tail => {
+        if(head.getBoundsInParent.intersects(PreBox.getBoundsInParent)) { //Caso a "boxIntersects" não seja nula, ou seja, caso tenha sido encontrada uma box que de facto se intersete com um dos objetos presentes na "ObjectList", então a função da return de uma OcLeaf
+          //val boxIntersects:Box = intersects(BoxList, head)
+          val plc: Placement = ((PreBox.getTranslateX - PreBox.getWidth / 2.toDouble, PreBox.getTranslateY - PreBox.getWidth / 2.toDouble, PreBox.getTranslateZ - PreBox.getWidth / 2.toDouble), PreBox.getWidth)
+          val listOfObjects = listOFObjectsInLeaf(PreBox, ObjectList)
+          val sec: Section = (plc, listOfObjects)
+          return OcLeaf(sec)
+        }
+        intersectsSituation(PreBox, tail)
+          //Caso a lista das box não esteja vazia, esta irá se chamar recursivamente até encontrar ou não uma box que intersete um dos objetos presentes na lista "ObjectList"
+      }
+    }
+  }
+
+  def listOFObjectsInLeaf(preBox: Box, ObjectList:List[Shape3D]): List[Shape3D] = {
+    ObjectList match {
+      case Nil => Nil
+      case x::xs => {
+        if (x.getBoundsInParent.intersects(preBox.getBoundsInParent)) {
+          return x::listOFObjectsInLeaf(preBox, xs)
+        }
+        listOFObjectsInLeaf(preBox, xs)
+      }
+    }
+  }
+
+
+
   //Função que verifica se determinado cubo interseta um objeto
+  /*
   def intersects(boxList:List[Box], objeto:Shape3D): Box = {
     boxList match {
       case Nil => null
       case headBox::tail => {
         if (objeto.getBoundsInParent.intersects(headBox.getBoundsInParent)) {
-          println("Foi encontrada a caixa" + headBox)
           headBox
         } // Se a headBox intersetar o objeto, então retorna a propria headBox
         else
@@ -128,26 +289,29 @@ case class OctreeEditor() {
       }
     }
   }
+   */
 
 
   //Função que verifica se determinada caixa, contêm/interseta outro.
-  def conectionSituation(box: Box, ObjectList:List[Shape3D], contains:Int, intersects:Int, objeto:Shape3D): Shape3D = {
+  def conectionSituation(box: Box, ObjectList:List[Shape3D], contains:Int, intersects:Int): Int = {
     ObjectList match {
       case Nil => {
         if (intersects == 0 && contains != 0) {
-          objeto //Caso a box não intersete nenhum objeto e contenha algum
-        } else{
-          null //Caso a box intersete um objeto ou não intersete nenhum objeto e não contenha nenhum
+          return 1 //Caso a box não intersete nenhum objeto e contenha algum
         }
+        if(intersects != 0 ){
+          return 2 //Caso a box intersete um objeto
+        }
+        0 //Caso a box não intersete nem contenha nenhum objeto
       }
       case head :: tail => {
         if (box.asInstanceOf[Shape3D].getBoundsInParent.contains(head.getBoundsInParent)) {
-          conectionSituation(box: Box, tail, contains + 1, intersects, head)
-        } else if (head.getBoundsInParent.intersects(box.getBoundsInParent)) {
-          conectionSituation(box: Box, tail, contains, intersects + 1, objeto)
-        } else {
-          conectionSituation(box: Box, tail, contains, intersects, objeto)
+          return conectionSituation(box, tail, contains + 1, intersects)
         }
+        if (head.getBoundsInParent.intersects(box.getBoundsInParent)) {
+          return conectionSituation(box, tail, contains, intersects + 1)
+        }
+        conectionSituation(box, tail, contains, intersects)
       }
     }
   }
