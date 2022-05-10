@@ -127,11 +127,13 @@ case class OctreeEditor() {
         val wiredBoxNumber:List[Int] = createNumberList(listWiredBox,ObjectList,1) //Devolve uma lista com o numero das box da lista acima.
 
         if (checkForConnections(listWiredBox, ObjectList, 0, 0) == 2) {
+          boxList.addOne(preBox)
           return intersectsSituation(preBox, ObjectList)
         }
 
         if (checkForConnections(listWiredBox, ObjectList, 0, 0) == 1) {
           //chama a função recursivamente com a octree defenida
+          boxList.addOne(preBox)
           return nodeDevelope(wiredBoxNumber, octree, listWiredBox, ObjectList, root, OctreeDimensions)
         }
         OcEmpty
@@ -163,7 +165,6 @@ case class OctreeEditor() {
       case x::xs =>
         if(conectionSituation(x, objectlist, 0,0) == 1) {
           root.getChildren.add(x)
-          boxList += x
           return x::createWiredList(xs, objectlist, root)
         }
           createWiredList(xs, objectlist, root)
@@ -355,7 +356,7 @@ case class OctreeEditor() {
 
   def changeColor(listObj: Array[AnyRef], viewVolume: Shape3D): Unit = {
     listObj.map(x => {
-      if(viewVolume.getBoundsInParent.contains(x.asInstanceOf[Shape3D].getBoundsInParent) || x.asInstanceOf[Shape3D].getBoundsInParent.intersects(viewVolume.getBoundsInParent))
+      if(x.asInstanceOf[Shape3D].getBoundsInParent.intersects(viewVolume.getBoundsInParent))
         x.asInstanceOf[Shape3D].setMaterial(greenMaterial)
       else
         x.asInstanceOf[Shape3D].setMaterial(redMaterial)
@@ -371,7 +372,8 @@ case class OctreeEditor() {
 
       case OcLeaf(section) =>
 
-        updateShapeSize(section.asInstanceOf[Section]._1._2, section.asInstanceOf[Section]._2.toArray, fact)
+        updateShapeSize(section.asInstanceOf[Section]._1._2, section.asInstanceOf[Section]._2.toArray, fact) //Update aos aobjetos pertencentes à OcLeaf
+        updateShapeSize(section.asInstanceOf[Section]._1._2, boxList.toArray, fact) //Update das WiredBox
 
         val sec1: Section = (((section.asInstanceOf[Section]._1._1._1 * fact, section.asInstanceOf[Section]._1._1._2 * fact, section.asInstanceOf[Section]._1._1._3 * fact), section.asInstanceOf[Section]._1._2 * fact),
           section.asInstanceOf[Section]._2)
@@ -379,6 +381,7 @@ case class OctreeEditor() {
         OcLeaf(sec1)
 
       case OcNode(placement,up_00,up_01,up_10,up_11,down_00,down_01,down_10,down_11) =>
+
 
         updateShapeSize(placement._2, boxList.toArray, fact)
 

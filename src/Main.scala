@@ -130,9 +130,9 @@ class Main extends Application {
     scene.setOnMouseClicked(event => {
       camVolume.setTranslateX(camVolume.getTranslateX + 2)
 
-      //octreeEditor.updateViewColors(camVolume, oct2)
+      octreeEditor.updateViewColors(camVolume, oct2)
 
-      //octreeEditor.scaleOctree(2.0, oct2)
+      octreeEditor.scaleOctree(2.0, oct2)
 
       worldRoot.getChildren.removeAll()
 
