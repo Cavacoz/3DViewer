@@ -3,42 +3,38 @@ import javafx.geometry.Insets
 import javafx.scene.paint.PhongMaterial
 import javafx.scene.shape._
 import javafx.scene.transform.Rotate
-import javafx.scene.{Group, Node}
+import javafx.scene.{Group}
 import javafx.stage.Stage
 import javafx.geometry.Pos
 import javafx.scene.layout.StackPane
 import javafx.scene.paint.Color
 import javafx.scene.{PerspectiveCamera, Scene, SceneAntialiasing, SubScene}
 
-import scala.collection.mutable.ListBuffer
-
-
 class Main extends Application {
 
-  //val file = "C:\\Users\\My PC\\Desktop\\Grupo30_RuiCavaco_MiguelReis_InesComba\\conf3D.txt"
-  val file = "/Users/miguelreis/Desktop/Universidade/2ºsemestre-2ºano/PPM/Projeto/Base_Project2Share/conf3D.txt"
-  val octIns = ObjectLoader()
   var list3D = List[Shape3D]()
-  val octreeEditor = OctreeEditor()
 
   //Materials to be applied to the 3D objects
   val redMaterial = new PhongMaterial()
-  redMaterial.setDiffuseColor(Color.rgb(255,0,0))
+  redMaterial.setDiffuseColor(Color.rgb(255, 0, 0))
 
   val greenMaterial = new PhongMaterial()
-  greenMaterial.setDiffuseColor(Color.rgb(0,255,0))
+  greenMaterial.setDiffuseColor(Color.rgb(0, 255, 0))
 
   val blueMaterial = new PhongMaterial()
-  blueMaterial.setDiffuseColor(Color.rgb(0,0,255))
+  blueMaterial.setDiffuseColor(Color.rgb(0, 0, 255))
 
   /*
       Additional information about JavaFX basic concepts (e.g. Stage, Scene) will be provided in week7
-     */
+  */
   override def start(stage: Stage): Unit = {
 
     //Get and print program arguments (args: Array[String])
     val params = getParameters
     println("Program arguments:" + params.getRaw)
+
+    val file = "C:\\Users\\My PC\\Desktop\\Grupo30_RuiCavaco_MiguelReis_InesComba\\" + params.getRaw.get(0) + ".txt"
+    //val file = "/Users/miguelreis/Desktop/Universidade/2ºsemestre-2ºano/PPM/Projeto/Base_Project2Share/conf3D.txt"
 
     //3D objects
     val lineX = new Line(0, 0, 200, 0)
@@ -66,10 +62,10 @@ class Main extends Application {
     wiredBox.setDrawMode(DrawMode.LINE)
 
     // 3D objects (group of nodes - javafx.scene.Node) that will be provide to the subScene
-     val worldRoot:Group = new Group(lineX, lineY, lineZ, camVolume)
+    val worldRoot: Group = new Group(lineX, lineY, lineZ, camVolume)
 
     //Tarefa 1 - Carregamento dos Objetos 3D do ficheiro de texto.
-    list3D = octIns.loadFromTextFile(file, worldRoot, list3D)
+    list3D = ObjectLoader.loadFromTextFile(file, worldRoot)
 
     // Camera
     val camera = new PerspectiveCamera(true)
@@ -120,19 +116,19 @@ class Main extends Application {
 
     //Criação da OcTree
     worldRoot.getChildren.add(wiredBox)
-    val plc:octreeEditor.Placement = ((wiredBox.getTranslateX - wiredBox.getWidth / 2,wiredBox.getTranslateY - wiredBox.getWidth / 2, wiredBox.getTranslateZ - wiredBox.getWidth / 2), wiredBox.getWidth)
-    val octree: Octree[octreeEditor.Placement] = OcNode(plc, OcEmpty, OcEmpty, OcEmpty, OcEmpty, OcEmpty, OcEmpty, OcEmpty, OcEmpty)
+    val plc: OctreeEditor.Placement = ((wiredBox.getTranslateX - wiredBox.getWidth / 2, wiredBox.getTranslateY - wiredBox.getWidth / 2, wiredBox.getTranslateZ - wiredBox.getWidth / 2), wiredBox.getWidth)
+    val octree: Octree[OctreeEditor.Placement] = OcNode(plc, OcEmpty, OcEmpty, OcEmpty, OcEmpty, OcEmpty, OcEmpty, OcEmpty, OcEmpty)
 
-    val oct2:Octree[octreeEditor.Placement] = octreeEditor.octreeDevelope(wiredBox,list3D, 8.0, worldRoot, octree)
+    val oct2: Octree[OctreeEditor.Placement] = OctreeEditor.octreeDevelope(wiredBox, list3D, 8.0, worldRoot, octree)
     println(oct2)
 
     //Mouse left click interaction
     scene.setOnMouseClicked(event => {
       camVolume.setTranslateX(camVolume.getTranslateX + 2)
 
-      octreeEditor.updateViewColors(camVolume, oct2)
+      OctreeEditor.updateViewColors(camVolume, oct2)
 
-      octreeEditor.scaleOctree(2.0, oct2)
+      OctreeEditor.scaleOctree(2.0, oct2)
 
       worldRoot.getChildren.removeAll()
 
