@@ -14,13 +14,13 @@ object OctreeEditor {
   val boxList = ListBuffer[Box]()
 
   val redMaterial = new PhongMaterial()
-  redMaterial.setDiffuseColor(Color.rgb(255, 0, 0))
+  redMaterial.setDiffuseColor(Color.rgb(150, 0, 0))
 
   val greenMaterial = new PhongMaterial()
   greenMaterial.setDiffuseColor(Color.rgb(0, 255, 0))
 
   val blueMaterial = new PhongMaterial()
-  blueMaterial.setDiffuseColor(Color.rgb(0, 0, 255))
+  blueMaterial.setDiffuseColor(Color.rgb(0, 0, 150))
 
   //Tarefa 2
   def octreeDevelope(preBox: Box, ObjectList: List[Shape3D], OctreeDimensions: Double, root: Group, octree: Octree[Placement]): Octree[Placement] = {
@@ -166,10 +166,10 @@ object OctreeEditor {
           return OcLeaf(sec)
         }
         intersectsSituation(PreBox, tail)
-          //Caso a lista das box não esteja vazia, esta irá se chamar recursivamente até encontrar ou não uma box que intersete um dos objetos presentes na lista "ObjectList"
-        }
+      //Caso a lista das box não esteja vazia, esta irá se chamar recursivamente até encontrar ou não uma box que intersete um dos objetos presentes na lista "ObjectList"
     }
-  
+  }
+
   def listOFObjectsInLeaf(preBox: Box, ObjectList: List[Shape3D]): List[Shape3D] = {
     ObjectList match {
       case Nil => Nil
@@ -255,6 +255,9 @@ object OctreeEditor {
   //Tarefa 4
   def scaleOctree(fact: Double, oct: Octree[Placement]): Octree[Placement] = {
 
+
+    //boxList.map( x => println(x.getWidth))
+
     oct match {
 
       case OcEmpty => OcEmpty
@@ -278,7 +281,9 @@ object OctreeEditor {
           scaleOctree(fact, up_10), scaleOctree(fact, up_11),
           scaleOctree(fact, down_00), scaleOctree(fact, down_01),
           scaleOctree(fact, down_10), scaleOctree(fact, down_11))
+
     }
+
   }
 
   def updateShapeSize(size: Double, listObj: List[Node], fact: Double): Unit = {
@@ -296,5 +301,12 @@ object OctreeEditor {
     x.setTranslateX(x.getTranslateX * fact)
     x.setTranslateY(x.getTranslateY * fact)
     x.setTranslateZ(x.getTranslateZ * fact)
+    /*
+    if(x.isInstanceOf[Box])
+      println("Box " + x.asInstanceOf[Box].getWidth)
+    else
+      println("Cylinder " + x.asInstanceOf[Cylinder].getHeight)
+
+     */
   }
 }

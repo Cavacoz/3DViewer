@@ -1,14 +1,14 @@
 import javafx.application.Application
+import javafx.fxml.FXMLLoader
 import javafx.geometry.Insets
 import javafx.scene.paint.PhongMaterial
 import javafx.scene.shape._
 import javafx.scene.transform.Rotate
-import javafx.scene.{Group}
+import javafx.scene.{Group, Parent, PerspectiveCamera, Scene, SceneAntialiasing, SubScene}
 import javafx.stage.Stage
 import javafx.geometry.Pos
 import javafx.scene.layout.StackPane
 import javafx.scene.paint.Color
-import javafx.scene.{PerspectiveCamera, Scene, SceneAntialiasing, SubScene}
 
 class Main extends Application {
 
@@ -114,6 +114,8 @@ class Main extends Application {
     stage.setScene(scene)
     stage.show
 
+
+
     //Criação da OcTree
     worldRoot.getChildren.add(wiredBox)
     val plc: OctreeEditor.Placement = ((wiredBox.getTranslateX - wiredBox.getWidth / 2, wiredBox.getTranslateY - wiredBox.getWidth / 2, wiredBox.getTranslateZ - wiredBox.getWidth / 2), wiredBox.getWidth)
@@ -123,12 +125,13 @@ class Main extends Application {
     println(oct2)
 
     //Mouse left click interaction
+
     scene.setOnMouseClicked(event => {
       camVolume.setTranslateX(camVolume.getTranslateX + 2)
 
-      OctreeEditor.updateViewColors(camVolume, oct2)
+      //OctreeEditor.updateViewColors(camVolume, oct2)
 
-      OctreeEditor.scaleOctree(2.0, oct2)
+      //OctreeEditor.scaleOctree(2.0, oct2)
 
       worldRoot.getChildren.removeAll()
 
@@ -146,7 +149,6 @@ class Main extends Application {
 
 object FxApp {
   def main(args: Array[String]): Unit = {
-
     Application.launch(classOf[Main], args: _*)
 
   }
