@@ -255,9 +255,6 @@ object OctreeEditor {
   //Tarefa 4
   def scaleOctree(fact: Double, oct: Octree[Placement]): Octree[Placement] = {
 
-
-    //boxList.map( x => println(x.getWidth))
-
     oct match {
 
       case OcEmpty => OcEmpty
@@ -309,4 +306,38 @@ object OctreeEditor {
 
      */
   }
+
+  //Tarefa
+  def mapColourEffect(func: Color => Color, octree: Octree[Placement]): Octree[Placement] ={
+
+    octree match {
+
+      case OcEmpty => OcEmpty
+
+      case OcLeaf(section) =>
+
+        val sec1: Section = (((section.asInstanceOf[Section]._1._1._1, section.asInstanceOf[Section]._1._1._2, section.asInstanceOf[Section]._1._1._3), section.asInstanceOf[Section]._1._2),
+          section.asInstanceOf[Section]._2)
+
+        sec1._2.map( x => {
+          x.asInstanceOf[Shape3D].setMaterial(new PhongMaterial(func(x.asInstanceOf[Shape3D].getMaterial().asInstanceOf[PhongMaterial].getDiffuseColor)))
+        })
+
+        OcLeaf(sec1)
+
+      case OcNode(placement, up_00, up_01, up_10, up_11, down_00, down_01, down_10, down_11) =>
+
+        OcNode(placement,
+          mapColourEffect(func, up_00), mapColourEffect(func, up_01),
+          mapColourEffect(func, up_10), mapColourEffect(func, up_11),
+          mapColourEffect(func, down_00), mapColourEffect(func, down_01),
+          mapColourEffect(func, down_10), mapColourEffect(func, down_11))
+    }
+  }
+
+  def func(color: Color): Color = {
+    val newColor = Color.rgb(color.getRed.toInt, 0, color.getBlue.toInt)
+    newColor
+  }
+
 }

@@ -21,5 +21,7 @@
             <Insets left="870.0" right="90.0" top="400.0" />
          </StackPane.margin></TextField>
       <Button fx:id="saveState" mnemonicParsing="false" onMouseClicked="#saveOctreeState" text="Save Octree State" translateX="390.0" translateY="100.0" />
+      <Button fx:id="removeGreen" mnemonicParsing="false" onMouseClicked="#onRemoveGreenClicked" text="Remove Green" translateX="325.0" translateY="-50.0" />
+      <Label text="Color Options" translateX="390.0" translateY="-100.0" />
    </children>
 </StackPane>

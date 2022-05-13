@@ -1,5 +1,5 @@
 import InitSubScene.{camVolume, currentOctree, wiredBox, worldRoot}
-import OctreeEditor.{Placement, boxList}
+import OctreeEditor.{Placement, boxList, func}
 import javafx.fxml.FXML
 import javafx.scene.control.{Button, TextField}
 import javafx.scene.SubScene
@@ -18,15 +18,6 @@ class Controller {
   var subScene1: SubScene = _
 
   @FXML
-  var saveState: Button = _
-
-  @FXML
-  var loadOctree: Button = _
-
-  @FXML
-  var fileName: TextField = _
-
-  @FXML
   var scaleLabel: Label = _
 
   @FXML
@@ -34,6 +25,21 @@ class Controller {
 
   @FXML
   var scaleDown: Button = _
+
+  @FXML
+  var colorLabel: Label = _
+
+  @FXML
+  var removeGreen: Button = _
+
+  @FXML
+  var saveState: Button = _
+
+  @FXML
+  var loadOctree: Button = _
+
+  @FXML
+  var fileName: TextField = _
 
   @FXML
   var stackPane: StackPane = _
@@ -72,5 +78,10 @@ class Controller {
       InitSubScene.currentOctree = oct
       println(oct)
     }
+  }
+
+  def onRemoveGreenClicked(): Unit ={
+    val oct: Octree[Placement] = OctreeEditor.mapColourEffect(func, currentOctree)
+    InitSubScene.currentOctree = oct
   }
 }
