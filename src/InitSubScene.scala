@@ -18,14 +18,11 @@ class InitSubScene extends Application {
     val scene = new Scene(mainViewRoot)
     scene.setCamera(new PerspectiveCamera(false))
     primaryStage.setScene(scene)
-    //primaryStage.setScene(InitSubScene.scene)
     primaryStage.show()
   }
 }
 
 object InitSubScene {
-
-  val file = "C:\\Users\\My PC\\Desktop\\Grupo30_RuiCavaco_MiguelReis_InesComba\\conf3D.txt"
 
   //3D objects
   val lineX = new Line(0, 0, 200, 0)
@@ -52,8 +49,6 @@ object InitSubScene {
   wiredBox.setDrawMode(DrawMode.LINE)
 
   val worldRoot: Group = new Group(camVolume, wiredBox, lineX, lineY, lineZ)
-
-  val list3D: List[Shape3D] = ObjectLoader.loadFromTextFile(file, worldRoot)
 
   val plc: OctreeEditor.Placement = ((wiredBox.getTranslateX - wiredBox.getWidth / 2, wiredBox.getTranslateY - wiredBox.getWidth / 2, wiredBox.getTranslateZ - wiredBox.getWidth / 2), wiredBox.getWidth)
   var currentOctree: Octree[OctreeEditor.Placement] = OcNode(plc, OcEmpty, OcEmpty, OcEmpty, OcEmpty, OcEmpty, OcEmpty, OcEmpty, OcEmpty)

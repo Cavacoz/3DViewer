@@ -1,7 +1,10 @@
+import OctreeEditor.Placement
 import javafx.scene.paint.{Color, PhongMaterial}
 import javafx.scene.shape.{Cylinder, Shape3D}
 import javafx.scene.{Group, Node}
 
+import java.io._
+import java.nio.file.{Files, Paths}
 import scala.io.Source
 
 object ObjectLoader {
@@ -35,6 +38,20 @@ object ObjectLoader {
     }
     bufferedSource.close
     list3D
+  }
+
+  def saveOctreeState(oct: Octree[Placement]): Unit ={
+    if(!Files.exists(Paths.get("OctreeState.txt"))) {
+      val writer = new PrintWriter(new File("OctreeState.txt"))
+      writer.write(oct.toString + "\n")
+      writer.close()
+    } else {
+      val fw = new FileWriter("OctreeState.txt", true)
+      try{
+        fw.write(oct.toString + "\n")
+      }
+      finally fw.close()
+    }
   }
 
   def addInsideList(list: List[Shape3D], objeto: Shape3D): List[Shape3D] = {

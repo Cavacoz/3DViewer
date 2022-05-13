@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.*?>
 <?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
@@ -15,5 +16,10 @@
       <Button fx:id="scaleUp" mnemonicParsing="false" onMouseClicked="#onScaleUpClicked" text="Scale Up by 2" textAlignment="CENTER" translateX="325.0" translateY="-200.0" />
       <Label text="Scale Options" translateX="390.0" translateY="-250.0" />
       <Button fx:id="loadOctree" mnemonicParsing="false" onMouseClicked="#onLoadOctreeClicked" text="Load Octree" translateX="390.0" translateY="250.0" />
+      <TextField fx:id="fileName">
+         <StackPane.margin>
+            <Insets left="870.0" right="90.0" top="400.0" />
+         </StackPane.margin></TextField>
+      <Button fx:id="saveState" mnemonicParsing="false" onMouseClicked="#saveOctreeState" text="Save Octree State" translateX="390.0" translateY="100.0" />
    </children>
 </StackPane>
