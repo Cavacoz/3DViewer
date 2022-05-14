@@ -40,14 +40,14 @@ object ObjectLoader {
     list3D
   }
 
-  def saveOctreeState(oct: Octree[Placement]): Unit ={
-    if(!Files.exists(Paths.get("OctreeState.txt"))) {
+  def saveOctreeState(oct: Octree[Placement]): Unit = {
+    if (!Files.exists(Paths.get("OctreeState.txt"))) {
       val writer = new PrintWriter(new File("OctreeState.txt"))
       writer.write(oct.toString + "\n")
       writer.close()
     } else {
       val fw = new FileWriter("OctreeState.txt", true)
-      try{
+      try {
         fw.write(oct.toString + "\n")
       }
       finally fw.close()

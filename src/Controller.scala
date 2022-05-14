@@ -1,5 +1,5 @@
 import InitSubScene.{camVolume, currentOctree, wiredBox, worldRoot}
-import OctreeEditor.{Placement, boxList, func}
+import OctreeEditor.{Placement, func}
 import javafx.fxml.FXML
 import javafx.scene.control.{Button, TextField}
 import javafx.scene.SubScene
@@ -11,8 +11,6 @@ import java.awt.Label
 class Controller {
 
   var file: String = null
-
-  var list3D: List[Shape3D] = null
 
   @FXML
   var subScene1: SubScene = _
@@ -31,6 +29,9 @@ class Controller {
 
   @FXML
   var removeGreen: Button = _
+
+  @FXML
+  var addSepia: Button = _
 
   @FXML
   var saveState: Button = _
@@ -73,15 +74,21 @@ class Controller {
   def onLoadOctreeClicked(): Unit = {
     if (!fileName.getText.isEmpty) {
       file = "C:\\Users\\My PC\\Desktop\\Grupo30_RuiCavaco_MiguelReis_InesComba\\" + fileName.getText() + ".txt"
-      list3D = ObjectLoader.loadFromTextFile(file, worldRoot)
+      val list3D = ObjectLoader.loadFromTextFile(file, worldRoot)
       val oct: Octree[Placement] = OctreeEditor.octreeDevelope(wiredBox, list3D, 8.0, worldRoot, currentOctree)
       InitSubScene.currentOctree = oct
+      fileName.clear()
       println(oct)
     }
   }
 
-  def onRemoveGreenClicked(): Unit ={
-    val oct: Octree[Placement] = OctreeEditor.mapColourEffect(func, currentOctree)
+  def onRemoveGreenClicked(): Unit = {
+    val oct: Octree[Placement] = OctreeEditor.mapColourEffect(func, currentOctree, 0)
+    InitSubScene.currentOctree = oct
+  }
+
+  def onSepiaClicked(): Unit = {
+    val oct: Octree[Placement] = OctreeEditor.mapColourEffect(func, currentOctree, 1)
     InitSubScene.currentOctree = oct
   }
 }

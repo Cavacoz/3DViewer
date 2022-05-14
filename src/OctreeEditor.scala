@@ -17,7 +17,7 @@ object OctreeEditor {
   redMaterial.setDiffuseColor(Color.rgb(150, 0, 0))
 
   val greenMaterial = new PhongMaterial()
-  greenMaterial.setDiffuseColor(Color.rgb(0, 255, 0))
+  greenMaterial.setDiffuseColor(Color.rgb(0, 255, 100))
 
   val blueMaterial = new PhongMaterial()
   blueMaterial.setDiffuseColor(Color.rgb(0, 0, 150))
@@ -307,8 +307,8 @@ object OctreeEditor {
      */
   }
 
-  //Tarefa
-  def mapColourEffect(func: Color => Color, octree: Octree[Placement]): Octree[Placement] ={
+  //Tarefa 5
+  def mapColourEffect(func: (Color, Int) => Color, octree: Octree[Placement], n: Int): Octree[Placement] = {
 
     octree match {
 
@@ -319,8 +319,8 @@ object OctreeEditor {
         val sec1: Section = (((section.asInstanceOf[Section]._1._1._1, section.asInstanceOf[Section]._1._1._2, section.asInstanceOf[Section]._1._1._3), section.asInstanceOf[Section]._1._2),
           section.asInstanceOf[Section]._2)
 
-        sec1._2.map( x => {
-          x.asInstanceOf[Shape3D].setMaterial(new PhongMaterial(func(x.asInstanceOf[Shape3D].getMaterial().asInstanceOf[PhongMaterial].getDiffuseColor)))
+        sec1._2.map(x => {
+          x.asInstanceOf[Shape3D].setMaterial(new PhongMaterial(func(x.asInstanceOf[Shape3D].getMaterial().asInstanceOf[PhongMaterial].getDiffuseColor, n)))
         })
 
         OcLeaf(sec1)
@@ -328,16 +328,30 @@ object OctreeEditor {
       case OcNode(placement, up_00, up_01, up_10, up_11, down_00, down_01, down_10, down_11) =>
 
         OcNode(placement,
-          mapColourEffect(func, up_00), mapColourEffect(func, up_01),
-          mapColourEffect(func, up_10), mapColourEffect(func, up_11),
-          mapColourEffect(func, down_00), mapColourEffect(func, down_01),
-          mapColourEffect(func, down_10), mapColourEffect(func, down_11))
+          mapColourEffect(func, up_00, n), mapColourEffect(func, up_01, n),
+          mapColourEffect(func, up_10, n), mapColourEffect(func, up_11, n),
+          mapColourEffect(func, down_00, n), mapColourEffect(func, down_01, n),
+          mapColourEffect(func, down_10, n), mapColourEffect(func, down_11, n))
     }
   }
 
-  def func(color: Color): Color = {
-    val newColor = Color.rgb(color.getRed.toInt, 0, color.getBlue.toInt)
-    newColor
+  def func(color: Color, n: Int): Color = {
+    n match {
+      case 0 =>
+        val newColor = Color.rgb((color.getRed * 255).toInt, 0, (color.getBlue * 255).toInt)
+        newColor
+      case 1 =>
+        var red = (0.4 * color.getRed * 255) + (0.77 * color.getGreen * 255) + (0.2 * color.getBlue * 255)
+        if (red > 255)
+          red = 255
+        var green = (0.35 * color.getRed * 255) + (0.69 * color.getGreen * 255) + (0.17 * color.getBlue * 255)
+        if (green > 255)
+          green = 255
+        var blue = (0.27 * color.getRed * 255) + (0.53 * color.getGreen * 255) + (0.13 * color.getBlue * 255)
+        if (blue > 255)
+          blue = 255
+        val newColor = Color.rgb(red.toInt, green.toInt, blue.toInt)
+        newColor
+    }
   }
-
 }
