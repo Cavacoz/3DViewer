@@ -9,6 +9,8 @@ import java.awt.Label
 
 class Controller {
 
+  var loaded: Boolean = false
+
   @FXML
   var subScene1: SubScene = _
 
@@ -69,13 +71,14 @@ class Controller {
   }
 
   def onLoadOctreeClicked(): Unit = {
-    if (!fileName.getText.isEmpty) {
+    if (loaded == false) {
       val file = "C:\\Users\\My PC\\Desktop\\Grupo30_RuiCavaco_MiguelReis_InesComba\\" + fileName.getText() + ".txt"
       val list3D = ObjectLoader.loadFromTextFile(file, worldRoot)
       val oct: Octree[Placement] = OctreeEditor.octreeDevelope(wiredBox, list3D, 8.0, worldRoot, currentOctree)
       InitSubScene.currentOctree = oct
       fileName.clear()
       println(oct)
+      loaded = true
     }
   }
 
