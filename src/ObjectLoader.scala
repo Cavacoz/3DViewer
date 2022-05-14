@@ -1,7 +1,7 @@
 import OctreeEditor.Placement
 import javafx.scene.paint.{Color, PhongMaterial}
 import javafx.scene.shape.{Cylinder, Shape3D}
-import javafx.scene.{Group, Node}
+import javafx.scene.{Group}
 
 import java.io._
 import java.nio.file.{Files, Paths}

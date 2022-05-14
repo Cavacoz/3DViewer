@@ -4,8 +4,8 @@ import javafx.fxml.FXMLLoader
 import javafx.geometry.{Insets, Pos}
 import javafx.scene.{Group, Parent, PerspectiveCamera, Scene, SceneAntialiasing, SubScene}
 import javafx.scene.layout.StackPane
-import javafx.scene.paint.{Color, PhongMaterial}
-import javafx.scene.shape.{Box, Cylinder, DrawMode, Line, Shape3D}
+import javafx.scene.paint.{Color}
+import javafx.scene.shape.{Box, Cylinder, DrawMode, Line}
 import javafx.scene.transform.Rotate
 import javafx.stage.Stage
 

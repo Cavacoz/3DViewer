@@ -4,13 +4,10 @@ import javafx.fxml.FXML
 import javafx.scene.control.{Button, TextField}
 import javafx.scene.SubScene
 import javafx.scene.layout.StackPane
-import javafx.scene.shape.Shape3D
 
 import java.awt.Label
 
 class Controller {
-
-  var file: String = null
 
   @FXML
   var subScene1: SubScene = _
@@ -73,7 +70,7 @@ class Controller {
 
   def onLoadOctreeClicked(): Unit = {
     if (!fileName.getText.isEmpty) {
-      file = "C:\\Users\\My PC\\Desktop\\Grupo30_RuiCavaco_MiguelReis_InesComba\\" + fileName.getText() + ".txt"
+      val file = "C:\\Users\\My PC\\Desktop\\Grupo30_RuiCavaco_MiguelReis_InesComba\\" + fileName.getText() + ".txt"
       val list3D = ObjectLoader.loadFromTextFile(file, worldRoot)
       val oct: Octree[Placement] = OctreeEditor.octreeDevelope(wiredBox, list3D, 8.0, worldRoot, currentOctree)
       InitSubScene.currentOctree = oct
