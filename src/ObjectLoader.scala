@@ -2,7 +2,6 @@ import OctreeEditor.Placement
 import javafx.scene.paint.{Color, PhongMaterial}
 import javafx.scene.shape.{Cylinder, Shape3D}
 import javafx.scene.{Group}
-
 import java.io._
 import java.nio.file.{Files, Paths}
 import scala.io.Source
@@ -60,5 +59,4 @@ object ObjectLoader {
       case x :: xs => x :: addInsideList(xs, objeto)
     }
   }
-
 }

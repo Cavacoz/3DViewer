@@ -1,3 +1,4 @@
+import InitSubScene.worldRoot
 import javafx.scene.paint.{Color, PhongMaterial}
 import javafx.scene.{Group, Node}
 import javafx.scene.shape.{Box, Cylinder, DrawMode, Shape3D}
@@ -12,6 +13,7 @@ object OctreeEditor {
   type Section = (Placement, List[Node])
 
   val boxList = ListBuffer[Box]()
+  //val cylinderList = ListBuffer[Cylinder]()
 
   val redMaterial = new PhongMaterial()
   redMaterial.setDiffuseColor(Color.rgb(150, 0, 0))
@@ -28,6 +30,7 @@ object OctreeEditor {
     val origemx: Int = preBox.getTranslateX.toInt
     val origemy: Int = preBox.getTranslateY.toInt
     val origemz: Int = preBox.getTranslateZ.toInt
+
     //Criação das caixas que dividem o Cubo "Pai" em 8 "filhos"
     val Box1 = createBox(tamanho, origemx - tamanho / 2, origemy - tamanho / 2, tamanho / 2)
     val Box2 = createBox(tamanho, origemx - tamanho / 2 + tamanho, origemy - tamanho / 2 + tamanho, origemz - tamanho / 2)
@@ -39,8 +42,10 @@ object OctreeEditor {
     val Box8 = createBox(tamanho, origemx - tamanho / 2, origemy - tamanho / 2 + tamanho, origemz - tamanho / 2 + tamanho)
 
     val listWiredBox: List[Box] = List(Box1, Box2, Box3, Box4, Box5, Box6, Box7, Box8)
-    createWiredList(listWiredBox, ObjectList, root) //Devolve uma lista de wiredBox que contenham Objetos, e adiciona as wiredBox à root
-    val wiredBoxNumber: List[Int] = createNumberList(listWiredBox, ObjectList, 1) //Devolve uma lista com o numero das box da lista acima.
+    //Devolve uma lista de wiredBox que contenham Objetos, e adiciona as wiredBox à root
+    createWiredList(listWiredBox, ObjectList, root)
+    //Devolve uma lista com o numero das box da lista acima.
+    val wiredBoxNumber: List[Int] = createNumberList(listWiredBox, ObjectList, 1)
 
     if (checkForConnections(listWiredBox, ObjectList, 0, 0) == 2) {
       boxList.addOne(preBox)
@@ -92,9 +97,8 @@ object OctreeEditor {
     wiredList match {
       case Nil => Nil
       case x :: xs =>
-        //println(conectionSituation(x, objectlist, 0,0)) //Imprime a conexão da caixa com um objeto presente na lista
+        //Imprime a conexão da caixa com um objeto presente na lista
         if (conectionSituation(x, objectlist, 0, 0) == 1) {
-          //println("Box" + iteration + "Contêm um objeto")
           return iteration :: createNumberList(xs, objectlist, iteration + 1)
         }
         createNumberList(xs, objectlist, iteration + 1)
@@ -158,15 +162,15 @@ object OctreeEditor {
     ObjectList match {
 
       case head :: tail =>
-        if (head.getBoundsInParent.intersects(PreBox.getBoundsInParent)) { //Caso a "boxIntersects" não seja nula, ou seja, caso tenha sido encontrada uma box que de facto se intersete com um dos objetos presentes na "ObjectList", então a função da return de uma OcLeaf
-          //val boxIntersects:Box = intersects(BoxList, head)
+        //Caso a "boxIntersects" não seja nula, ou seja, caso tenha sido encontrada uma box que de facto se intersete com um dos objetos presentes na "ObjectList", então a função da return de uma OcLeaf
+        if (head.getBoundsInParent.intersects(PreBox.getBoundsInParent)) {
           val plc: Placement = ((PreBox.getTranslateX - PreBox.getWidth / 2.toDouble, PreBox.getTranslateY - PreBox.getWidth / 2.toDouble, PreBox.getTranslateZ - PreBox.getWidth / 2.toDouble), PreBox.getWidth)
           val listOfObjects = listOFObjectsInLeaf(PreBox, ObjectList)
           val sec: Section = (plc, listOfObjects)
           return OcLeaf(sec)
         }
+        //Caso a lista das box não esteja vazia, esta irá se chamar recursivamente até encontrar ou não uma box que intersete um dos objetos presentes na lista "ObjectList"
         intersectsSituation(PreBox, tail)
-      //Caso a lista das box não esteja vazia, esta irá se chamar recursivamente até encontrar ou não uma box que intersete um dos objetos presentes na lista "ObjectList"
     }
   }
 
@@ -280,7 +284,6 @@ object OctreeEditor {
           scaleOctree(fact, down_10), scaleOctree(fact, down_11))
 
     }
-
   }
 
   def updateShapeSize(size: Double, listObj: List[Node], fact: Double): Unit = {
@@ -298,13 +301,6 @@ object OctreeEditor {
     x.setTranslateX(x.getTranslateX * fact)
     x.setTranslateY(x.getTranslateY * fact)
     x.setTranslateZ(x.getTranslateZ * fact)
-    /*
-    if(x.isInstanceOf[Box])
-      println("Box " + x.asInstanceOf[Box].getWidth)
-    else
-      println("Cylinder " + x.asInstanceOf[Cylinder].getHeight)
-
-     */
   }
 
   //Tarefa 5
@@ -354,4 +350,58 @@ object OctreeEditor {
         newColor
     }
   }
+
+
+
+
+  //Outra opção de dar scale na Octree, mas com ListBuffer.
+
+
+  /*
+  def scaleOctree1(fact: Double, oct: Octree[Placement]): Octree[Placement] = {
+    cylinderList.clear()
+    lerOctree(fact, oct)
+    var sizepreBox = 0
+    boxList.map(x => if (x.getWidth > sizepreBox) sizepreBox = x.getWidth.toInt)
+    val newPreBox: Box = new Box(sizepreBox * fact, sizepreBox * fact, sizepreBox * fact)
+    newPreBox.setTranslateX(newPreBox.getWidth / 2)
+    newPreBox.setTranslateY(newPreBox.getWidth / 2)
+    newPreBox.setTranslateZ(newPreBox.getWidth / 2)
+    newPreBox.setMaterial(redMaterial)
+    newPreBox.setDrawMode(DrawMode.LINE)
+    removerBoxsWorldRoot(worldRoot)
+    worldRoot.getChildren.add(newPreBox)
+    val plc: OctreeEditor.Placement = ((newPreBox.getTranslateX - newPreBox.getWidth / 2, newPreBox.getTranslateY - newPreBox.getWidth / 2, newPreBox.getTranslateZ - newPreBox.getWidth / 2), newPreBox.getWidth)
+    val octree: Octree[OctreeEditor.Placement] = OcNode(plc, OcEmpty, OcEmpty, OcEmpty, OcEmpty, OcEmpty, OcEmpty, OcEmpty, OcEmpty)
+    println(cylinderList)
+    octreeDevelope(newPreBox, cylinderList.toList, 8.0, worldRoot, octree)
+  }
+
+  def lerOctree(fact: Double, oct: Octree[Placement]): Int = {
+    oct match {
+      case OcEmpty => 0
+      case OcLeaf(section) =>
+        updateShapeSize(section.asInstanceOf[Section]._1._2, section.asInstanceOf[Section]._2, fact)
+        println("Adicionou o cilindro")
+      //section.asInstanceOf[Section]._2.asInstanceOf[List[Shape3D]]
+      //section.asInstanceOf[Section]._2.map( x => cylinderList.addOne(x.asInstanceOf[Shape3D]))      0
+      //case OcNode(placement, up_00, up_01, up_10, up_11, down_00, down_01, down_10, down_11) =>
+      // lerOctree(fact, up_00)
+      // lerOctree(fact, up_01)
+      // lerOctree(fact, up_10)
+      // lerOctree(fact, up_11)
+      // lerOctree(fact, down_00)
+      // lerOctree(fact, down_01)
+      // lerOctree(fact, down_10)
+      // lerOctree(fact, down_11)  }}
+    }
+    0
+  }
+
+  def removerBoxsWorldRoot(root: Group) = {
+    root.getChildren.toArray.map(x => if (x.isInstanceOf[Box]) {
+      root.getChildren.remove(x)
+    })
+  }
+   */
 }
